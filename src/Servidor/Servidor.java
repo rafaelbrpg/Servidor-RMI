@@ -58,10 +58,8 @@ public class Servidor {
     public String getPortaCliente(String apelidoDestino){
         String porta = null;
         for (Contato contato : clientes.values()) {
-            System.out.println("Conectados:"+contato.getApelido()+"Porta: "+contato.getPorta()+"VEIOO ->"+apelidoDestino);
             if(contato.getApelido().equals(apelidoDestino)){
                 porta = contato.getPorta();
-                System.out.println("ENTROUUUU");
             }   
         }
         return porta;
@@ -74,5 +72,13 @@ public class Servidor {
             }   
         }
         return endereco;
+    }
+    private void desconectaCliente(String apelidoOrigem, String portaOrigem) {
+       /* 
+        Contato contato = new Contato(null, portaOrigem);
+        Cliente c = clientes.remove(cliente.getHash());
+        System.out.println(c);
+        enviarListaClientes();
+        atualizaTabelaClientesConectadis();*/
     }
 }

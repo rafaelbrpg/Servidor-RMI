@@ -24,7 +24,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
             try {
                 String porta = servidor.getPortaCliente(apelidoDestino);
                 String ipCliente = servidor.getEnderecoCliente(apelidoDestino);
-                System.out.println("*"+apelidoOrigem+" enviou "+ mensagem +"Para: "+apelidoDestino+" "+ipCliente+":"+porta);
+                System.out.println("*"+apelidoOrigem+" enviou "+ mensagem +" Para: "+apelidoDestino+" "+ipCliente+":"+porta);
                 ClienteInterface clienteInterface = (ClienteInterface) 
                         Naming.lookup("rmi://" + ipCliente + ":" + porta + "/" + apelidoDestino);
                 clienteInterface.ReceberMensagemServidor(apelidoOrigem, mensagem);
