@@ -17,9 +17,9 @@ public class Servidor {
 
         try {
             RegistryImpl impl = new RegistryImpl(porta); //carregar servidor de Registros        
-        
+
             ServidorInterface servidorInterface = new ServidorImpl(this);
-          
+
             Naming.rebind("rmi://localhost:" + String.valueOf(porta) + "/servidorEco", servidorInterface);
 
             System.out.println("Servidor aguardando chamadas de metodos");
@@ -39,46 +39,49 @@ public class Servidor {
     public DefaultTableModel getTabelaClientesConectados() {
         return tabelaClientesConectados;
     }
-    public void novoCliente(String enderecoOrigem, String portaOrigem, String apelido,String nome) {
-        Contato novoCliente = new Contato(enderecoOrigem, portaOrigem,apelido,nome);
+
+    public void novoCliente(String enderecoOrigem, String portaOrigem, String apelido, String nome) {
+        Contato novoCliente = new Contato(enderecoOrigem, portaOrigem, apelido, nome);
         clientes.put(novoCliente.getHash(), novoCliente);
         //enviarListaClientes();
         atualizaTabelaClientesConectadis();
     }
-    
+
     private void atualizaTabelaClientesConectadis() {
         tabelaClientesConectados.setRowCount(0);
 
         for (Contato contato : clientes.values()) {
-            String[] vetor = {contato.getEndereco(), contato.getNome(),contato.getApelido(),contato.getPorta()};
+            String[] vetor = {contato.getEndereco(), contato.getNome(), contato.getApelido(), contato.getPorta()};
             tabelaClientesConectados.addRow(vetor);
         }
     }
-    
-    public String getPortaCliente(String apelidoDestino){
+
+    public String getPortaCliente(String apelidoDestino) {
         String porta = null;
         for (Contato contato : clientes.values()) {
-            if(contato.getApelido().equals(apelidoDestino)){
+            if (contato.getApelido().equals(apelidoDestino)) {
                 porta = contato.getPorta();
-            }   
+            }
         }
         return porta;
     }
-    public String getEnderecoCliente(String apelidoDestino){
+
+    public String getEnderecoCliente(String apelidoDestino) {
         String endereco = null;
         for (Contato contato : clientes.values()) {
-            if(contato.getApelido().equals(apelidoDestino)){
+            if (contato.getApelido().equals(apelidoDestino)) {
                 endereco = contato.getEndereco();
-            }   
+            }
         }
         return endereco;
     }
-    private void desconectaCliente(String apelidoOrigem, String portaOrigem) {
-       /* 
-        Contato contato = new Contato(null, portaOrigem);
-        Cliente c = clientes.remove(cliente.getHash());
-        System.out.println(c);
-        enviarListaClientes();
-        atualizaTabelaClientesConectadis();*/
+
+    public void desconectaCliente(String apelidoOrigem, String ipCliente, String portaOrigem) {
+
+        Contato contato = new Contato(ipCliente, portaOrigem);
+        Contato c = clientes.remove(contato.getHash());
+        System.out.println(c + " Desconectou");
+        //enviarListaClientes();
+        atualizaTabelaClientesConectadis();
     }
 }

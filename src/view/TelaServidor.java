@@ -44,6 +44,12 @@ public class TelaServidor extends javax.swing.JFrame{
 
         jLabel1.setText("Porta");
 
+        txtPorta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPortaActionPerformed(evt);
+            }
+        });
+
         btnCarregar.setText("Carregar");
         btnCarregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,6 +155,10 @@ public class TelaServidor extends javax.swing.JFrame{
         //servidor.start();
         tbClientesConectados.setModel(servidor.getTabelaClientesConectados());
     }//GEN-LAST:event_btnCarregarActionPerformed
+
+    private void txtPortaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPortaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPortaActionPerformed
 
     /**
      * @param args the command line arguments

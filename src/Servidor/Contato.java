@@ -15,6 +15,12 @@ class Contato{
                 this.apelido= apelido;
                 this.nome = nome;
 	}
+        
+        public Contato(String endereco, String porta) {
+		super();
+		this.endereco = endereco;
+		this.porta = porta;
+	}
 	public String getEndereco() {
 		return endereco;
 	}
@@ -30,7 +36,7 @@ class Contato{
 	}
 
 	public String getHash(){
-		return endereco + String.valueOf(porta);
+		return (endereco + porta);
 	}
 	
 	@Override

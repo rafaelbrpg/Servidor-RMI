@@ -26,7 +26,8 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
                 String ipCliente = servidor.getEnderecoCliente(apelidoDestino);
                 System.out.println("*"+apelidoOrigem+" enviou "+ mensagem +" Para: "+apelidoDestino+" "+ipCliente+":"+porta);
                 ClienteInterface clienteInterface = (ClienteInterface) 
-                        Naming.lookup("rmi://" + ipCliente + ":" + porta + "/" + apelidoDestino);
+                        //Naming.lookup("rmi://" + ipCliente + ":" + porta + "/" + apelidoDestino);
+                        Naming.lookup("rmi://localhost:" + porta + "/" + apelidoDestino);
                 clienteInterface.ReceberMensagemServidor(apelidoOrigem, mensagem);
             } catch (NotBoundException ex) {
                 Logger.getLogger(ServidorImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,9 +40,10 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     @Override
     public int Conectar(String apelido, String nome, String ipCliente, String portaCliente) throws RemoteException {
         try {
-            ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://" + ipCliente + ":" + portaCliente + "/" + apelido);
+            //ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://" + ipCliente + ":" + portaCliente + "/" + apelido);
+            ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://localhost:" + portaCliente + "/" + apelido);
             servidor.novoCliente(ipCliente, portaCliente, apelido, nome);
-            clienteInterface.ReceberMensagemServidor("Servidor", "Deu certo, aleluia!");
+            clienteInterface.ReceberNovaConexao(apelido, nome);
         } catch (NotBoundException ex) {
             Logger.getLogger(ServidorImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
@@ -52,7 +54,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public void Desconectar(String apelido, String ipCliente, String portaCliente) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        servidor.desconectaCliente(apelido, ipCliente, portaCliente);
     }
 
 }
