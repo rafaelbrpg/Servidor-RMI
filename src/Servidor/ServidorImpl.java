@@ -62,7 +62,20 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
 
     @Override
     public void Desconectar(String apelido, String ipCliente, String portaCliente) throws RemoteException {
-        servidor.desconectaCliente(apelido, ipCliente, portaCliente);
+        String nome = servidor.desconectaCliente(apelido, ipCliente, portaCliente);
+
+        for (Contato destino : servidor.getListaClientes().values()) {
+            try {
+                //ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://"+ destino.getEndereco+":"+ destino.getPorta() + "/" + destino.getApelido());
+                ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://localhost:" + destino.getPorta() + "/" + destino.getApelido());
+                clienteInterface.DesconexaoCliente(apelido, nome);
+            } catch (NotBoundException ex) {
+                System.out.println("Erro conexão 1");
+            } catch (MalformedURLException ex) {
+                System.out.println("Erro conexão 2");
+            }
+        }
+        
     }
 
 }

@@ -75,13 +75,14 @@ public class Servidor {
         return endereco;
     }
 
-    public void desconectaCliente(String apelidoOrigem, String ipCliente, String portaOrigem) {
+    public String desconectaCliente(String apelidoOrigem, String ipCliente, String portaOrigem) {
 
         Contato contato = new Contato(ipCliente, portaOrigem);
         Contato c = clientes.remove(contato.getHash());
         System.out.println(c + " Desconectou");
         //enviarListaClientes();
         atualizaTabelaClientesConectadis();
+        return c.getNome();
     }
     
     public HashMap<String, Contato> getListaClientes(){
