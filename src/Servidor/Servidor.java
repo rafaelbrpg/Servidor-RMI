@@ -1,7 +1,6 @@
 package Servidor;
 
 import Interface.ServidorInterface;
-import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -83,5 +82,9 @@ public class Servidor {
         System.out.println(c + " Desconectou");
         //enviarListaClientes();
         atualizaTabelaClientesConectadis();
+    }
+    
+    public HashMap<String, Contato> getListaClientes(){
+        return clientes;
     }
 }
