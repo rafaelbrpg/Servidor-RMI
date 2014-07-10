@@ -10,10 +10,21 @@ import sun.rmi.registry.RegistryImpl;
 public class Servidor {
 
     private DefaultTableModel tabelaClientesConectados;
+    private DefaultTableModel tabelaLog;
     private HashMap<String, Contato> clientes;
 
     public Servidor(int porta) {
-
+        
+        clientes = new HashMap<String, Contato>();
+        tabelaClientesConectados = new DefaultTableModel();
+        tabelaClientesConectados.addColumn("Endereço");
+        tabelaClientesConectados.addColumn("Nome");
+        tabelaClientesConectados.addColumn("Apelido");
+        tabelaClientesConectados.addColumn("Porta");
+        
+        tabelaLog = new DefaultTableModel();
+        tabelaLog.addColumn("log");
+        
         try {
             RegistryImpl impl = new RegistryImpl(porta); //carregar servidor de Registros        
 
@@ -21,28 +32,29 @@ public class Servidor {
 
             Naming.rebind("rmi://localhost:" + String.valueOf(porta) + "/servidorEco", servidorInterface);
 
-            System.out.println("Servidor aguardando chamadas de metodos");
+            String msg = "> Servidor ONLINE!\n> aguardando chamadas de metodos...";
+            atualizaTabelaLog(msg);
         } catch (RemoteException ex) {
-            System.out.println("Servidor de registro nao foi carregado");
+            atualizaTabelaLog( "> Servidor de registro nao foi carregado");
         } catch (Exception e) {
-            System.out.println("Problema do registro dos metodos");
+            atualizaTabelaLog("> Problema do registro dos metodos");
         }
-        clientes = new HashMap<String, Contato>();
-        tabelaClientesConectados = new DefaultTableModel();
-        tabelaClientesConectados.addColumn("Endereço");
-        tabelaClientesConectados.addColumn("Nome");
-        tabelaClientesConectados.addColumn("Apelido");
-        tabelaClientesConectados.addColumn("Porta");
+        
     }
 
     public DefaultTableModel getTabelaClientesConectados() {
         return tabelaClientesConectados;
     }
-
+    
+    public DefaultTableModel getTabelaLog() {
+        return tabelaLog;
+    }
+    
     public void novoCliente(String enderecoOrigem, String portaOrigem, String apelido, String nome) {
         Contato novoCliente = new Contato(enderecoOrigem, portaOrigem, apelido, nome);
         clientes.put(novoCliente.getHash(), novoCliente);
         //enviarListaClientes();
+        atualizaTabelaLog("> "+nome+" Ip: "+enderecoOrigem+" Porta: "+portaOrigem+" está conectado.");
         atualizaTabelaClientesConectadis();
     }
 
@@ -80,6 +92,7 @@ public class Servidor {
         Contato contato = new Contato(ipCliente, portaOrigem);
         Contato c = clientes.remove(contato.getHash());
         System.out.println(c + " Desconectou");
+        atualizaTabelaLog("> "+c.getApelido()+" desconectou-se.");
         //enviarListaClientes();
         atualizaTabelaClientesConectadis();
         return c.getNome();
@@ -87,5 +100,10 @@ public class Servidor {
     
     public HashMap<String, Contato> getListaClientes(){
         return clientes;
+    }
+    
+    public void atualizaTabelaLog(String msg) {
+        String[] vetor = {String.valueOf(msg)};
+        tabelaLog.addRow(vetor);
     }
 }

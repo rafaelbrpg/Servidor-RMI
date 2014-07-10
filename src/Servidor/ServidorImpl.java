@@ -28,6 +28,8 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
             ClienteInterface clienteInterface = (ClienteInterface) //Naming.lookup("rmi://" + ipCliente + ":" + porta + "/" + apelidoDestino);
                     Naming.lookup("rmi://localhost:" + porta + "/" + apelidoDestino);
             clienteInterface.ReceberMensagemServidor(apelidoOrigem, mensagem);
+            
+            servidor.atualizaTabelaLog("> "+apelidoOrigem +" escreveu para "+apelidoDestino+".");
         } catch (NotBoundException ex) {
             Logger.getLogger(ServidorImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
