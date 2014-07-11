@@ -10,9 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServidorImpl extends UnicastRemoteObject implements ServidorInterface {
-
+    
     Servidor servidor;
-
+    
     public ServidorImpl(Servidor serv) throws RemoteException {
         servidor = serv;
     }
@@ -20,7 +20,21 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
     //método remoto definido na interface
     @Override
     public int ReceberMensagemCliente(String apelidoOrigem, String apelidoDestino, String mensagem) throws RemoteException {
-
+        if (apelidoDestino.equals("TODOS")) {
+            for (Contato destino : servidor.getListaClientes().values()) {
+                if (!apelidoOrigem.equals(destino.getApelido())) {
+                    try {
+                        //ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://"+ destino.getEndereco+":"+ destino.getPorta() + "/" + destino.getApelido());
+                        ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://localhost:" + destino.getPorta() + "/" + destino.getApelido());
+                        clienteInterface.ReceberMensagemServidor(apelidoOrigem, mensagem);
+                    } catch (NotBoundException ex) {
+                        System.out.println("Erro conexão 1");
+                    } catch (MalformedURLException ex) {
+                        System.out.println("Erro conexão 2");
+                    }
+                }
+            }
+        }
         try {
             String porta = servidor.getPortaCliente(apelidoDestino);
             String ipCliente = servidor.getEnderecoCliente(apelidoDestino);
@@ -29,7 +43,7 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
                     Naming.lookup("rmi://localhost:" + porta + "/" + apelidoDestino);
             clienteInterface.ReceberMensagemServidor(apelidoOrigem, mensagem);
             
-            servidor.atualizaTabelaLog("> "+apelidoOrigem +" escreveu para "+apelidoDestino+".");
+            servidor.atualizaTabelaLog("> " + apelidoOrigem + " escreveu para " + apelidoDestino + ".");
         } catch (NotBoundException ex) {
             Logger.getLogger(ServidorImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
@@ -37,12 +51,12 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         }
         return 0;
     }
-
+    
     @Override
     public int Conectar(String apelido, String nome, String ipCliente, String portaCliente) throws RemoteException {
         //ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://" + ipCliente + ":" + portaCliente + "/" + apelido);
         servidor.novoCliente(ipCliente, portaCliente, apelido, nome);
-
+        
         for (Contato destino : servidor.getListaClientes().values()) {
             try {
                 //ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://"+ destino.getEndereco+":"+ destino.getPorta() + "/" + destino.getApelido());
@@ -61,11 +75,11 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         System.out.println("Conectou.");
         return 0;
     }
-
+    
     @Override
     public void Desconectar(String apelido, String ipCliente, String portaCliente) throws RemoteException {
         String nome = servidor.desconectaCliente(apelido, ipCliente, portaCliente);
-
+        
         for (Contato destino : servidor.getListaClientes().values()) {
             try {
                 //ClienteInterface clienteInterface = (ClienteInterface) Naming.lookup("rmi://"+ destino.getEndereco+":"+ destino.getPorta() + "/" + destino.getApelido());
@@ -79,5 +93,5 @@ public class ServidorImpl extends UnicastRemoteObject implements ServidorInterfa
         }
         
     }
-
+    
 }
