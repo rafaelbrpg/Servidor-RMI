@@ -1,6 +1,7 @@
 package Servidor;
 
 import Interface.ServidorInterface;
+import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -29,10 +30,13 @@ public class Servidor {
             RegistryImpl impl = new RegistryImpl(porta); //carregar servidor de Registros        
 
             ServidorInterface servidorInterface = new ServidorImpl(this);
+            
+            String ipServ = InetAddress.getLocalHost().getHostAddress().toString();
 
-            Naming.rebind("rmi://localhost:" + String.valueOf(porta) + "/servidorEco", servidorInterface);
+            Naming.rebind("rmi://"+ipServ+":" + String.valueOf(porta) + "/servidorEco", servidorInterface);
 
             String msg = "> Servidor ONLINE!\n> aguardando chamadas de metodos...";
+            
             atualizaTabelaLog(msg);
         } catch (RemoteException ex) {
             atualizaTabelaLog( "> Servidor de registro nao foi carregado");
@@ -91,7 +95,6 @@ public class Servidor {
 
         Contato contato = new Contato(ipCliente, portaOrigem);
         Contato c = clientes.remove(contato.getHash());
-        System.out.println(c + " Desconectou");
         atualizaTabelaLog("> "+c.getApelido()+" desconectou-se.");
         //enviarListaClientes();
         atualizaTabelaClientesConectadis();
