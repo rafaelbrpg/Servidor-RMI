@@ -57,8 +57,7 @@ public class Servidor {
     public void novoCliente(String enderecoOrigem, String portaOrigem, String apelido, String nome) {
         Contato novoCliente = new Contato(enderecoOrigem, portaOrigem, apelido, nome);
         clientes.put(novoCliente.getHash(), novoCliente);
-        //enviarListaClientes();
-        atualizaTabelaLog("> "+nome+" Ip: "+enderecoOrigem+" Porta: "+portaOrigem+" está conectado.");
+        atualizaTabelaLog("> "+apelido+" Ip: "+enderecoOrigem+" Porta: "+portaOrigem+" - está conectado.");
         atualizaTabelaClientesConectadis();
     }
 
@@ -96,7 +95,6 @@ public class Servidor {
         Contato contato = new Contato(ipCliente, portaOrigem);
         Contato c = clientes.remove(contato.getHash());
         atualizaTabelaLog("> "+c.getApelido()+" desconectou-se.");
-        //enviarListaClientes();
         atualizaTabelaClientesConectadis();
         return c.getNome();
     }

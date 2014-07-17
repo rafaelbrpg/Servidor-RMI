@@ -103,6 +103,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPortaActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="txtPorta.setDocument(new MaskFieldUtil(MaskFieldUtil.ONLY_NUMBERS_MASK, 5, true));"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnCarregar">
           <Properties>

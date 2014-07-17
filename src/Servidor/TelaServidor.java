@@ -46,6 +46,7 @@ public class TelaServidor extends javax.swing.JFrame{
 
         jLabel1.setText("Porta");
 
+        txtPorta.setDocument(new MaskFieldUtil(MaskFieldUtil.ONLY_NUMBERS_MASK, 5, true));
         txtPorta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPortaActionPerformed(evt);
